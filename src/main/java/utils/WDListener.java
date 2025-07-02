@@ -7,6 +7,8 @@ import org.openqa.selenium.support.events.WebDriverListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 public class WDListener implements WebDriverListener {
     Logger logger = LoggerFactory.getLogger(WDListener.class);
 
@@ -17,9 +19,9 @@ public class WDListener implements WebDriverListener {
     }
 
     @Override
-    public void afterSendKeys(WebElement element, CharSequence... keysToSend) {
-        WebDriverListener.super.afterSendKeys(element, keysToSend);
-        logger.info("use send/keys " + element.getTagName() + keysToSend.toString());
+    public void beforeFindElement(WebDriver driver, By locator) {
+        WebDriverListener.super.beforeFindElement(driver, locator);
+        logger.info("find element with locator --> " + locator.toString());
     }
 
     @Override
@@ -29,9 +31,10 @@ public class WDListener implements WebDriverListener {
     }
 
     @Override
-    public void beforeFindElement(WebDriver driver, By locator) {
-        WebDriverListener.super.beforeFindElement(driver, locator);
-        logger.info("find element with locator --> " + locator.toString());
+    public void afterSendKeys(WebElement element, CharSequence... keysToSend) {
+        WebDriverListener.super.afterSendKeys(element, keysToSend);
+        logger.info("use sendKeys " + element.getTagName() + " --> " + Arrays.toString(keysToSend));
     }
+
 
 }

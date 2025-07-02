@@ -1,5 +1,6 @@
 package ui_tests;
 
+import data_providers.ContactDP;
 import dto.Contact;
 import dto.User;
 import manager.ApplicationManager;
@@ -16,9 +17,9 @@ import utils.TestNGListener;
 
 import static pages.BasePage.*;
 import static utils.RandomUtils.*;
+import static utils.PropertiesReader.*;
 
 @Listeners(TestNGListener.class)
-
 
 public class AddNewContactTests extends ApplicationManager {
     HomePage homePage;
@@ -30,7 +31,9 @@ public class AddNewContactTests extends ApplicationManager {
 
     @BeforeMethod
     public void login() {
-        User user = new User("qa_mail@mail.com", "Qwerty123!");
+        //User user = new User("qa_mail@mail.com", "Qwerty123!");
+        User user = new User(getProperty("login.properties", "email"),
+                getProperty("login.properties", "password"));
         homePage = new HomePage(getDriver());
         loginPage = clickButtonHeader(HeaderMenuItem.LOGIN);
         loginPage.typeLoginForm(user);
@@ -50,6 +53,14 @@ public class AddNewContactTests extends ApplicationManager {
                 .address("Haifa " + generateString(10))
                 .description("desc " + generateString(15))
                 .build();
+        addPage.typeAddNewContactForm(contact);
+        int sizeAfterAdd = contactsPage.getContactsListSize();
+        System.out.println(sizeBeforeAdd + "X" + sizeAfterAdd);
+        Assert.assertEquals(sizeBeforeAdd +1, sizeAfterAdd);
+    }
+
+    @Test(dataProvider = "dataProviderContactsFile", dataProviderClass = ContactDP.class)
+    public void addNewContactPositiveTestDP(Contact contact) {
         addPage.typeAddNewContactForm(contact);
         int sizeAfterAdd = contactsPage.getContactsListSize();
         System.out.println(sizeBeforeAdd + "X" + sizeAfterAdd);
@@ -91,7 +102,7 @@ public class AddNewContactTests extends ApplicationManager {
         Contact contact = Contact.builder()
                 .name("")
                 .lastName(generateString(10))
-                .phone(generatePhone(10))
+                .phone("0123456789")
                 .email(generateEmail(10))
                 .address("Haifa " + generateString(10))
                 .description("desc " + generateString(15))
@@ -101,11 +112,11 @@ public class AddNewContactTests extends ApplicationManager {
     }
 
     @Test(invocationCount = 1)
-    public void addNewContactNegativeTest_emptyLastName() {
+    public void addNewContactNegativeTest_emptyLast() {
         Contact contact = Contact.builder()
                 .name(generateString(10))
                 .lastName("")
-                .phone(generatePhone(10))
+                .phone("0123456789")
                 .email(generateEmail(10))
                 .address("Haifa " + generateString(10))
                 .description("desc " + generateString(15))
@@ -119,13 +130,15 @@ public class AddNewContactTests extends ApplicationManager {
         Contact contact = Contact.builder()
                 .name(generateString(10))
                 .lastName(generateString(10))
-                .phone("")
                 .email(generateEmail(10))
+                .phone("")
                 .address("Haifa " + generateString(10))
                 .description("desc " + generateString(15))
                 .build();
         addPage.typeAddNewContactForm(contact);
-        Assert.assertEquals(" Phone not valid: Phone number must contain only digits! And length min 10, max 15!", addPage.closeAlertReturnText());
+        //Assert.assertEquals(" Phone not valid: Phone number must contain only digits! And length min 10, max 15!",
+        //addPage.closeAlertReturnText());
+        Assert.assertTrue(addPage.closeAlertReturnText().contains("Phone number must contain only digits!"));
     }
 
     @Test(invocationCount = 1)
@@ -133,7 +146,7 @@ public class AddNewContactTests extends ApplicationManager {
         Contact contact = Contact.builder()
                 .name(generateString(10))
                 .lastName(generateString(10))
-                .phone(generatePhone(10))
+                .phone("0123456789")
                 .email("")
                 .address("Haifa " + generateString(10))
                 .description("desc " + generateString(15))

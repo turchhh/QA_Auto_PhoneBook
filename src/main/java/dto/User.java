@@ -8,7 +8,6 @@ public class User {
     }
 
     public User(String username, String password) {
-        super();
         this.username = username;
         this.password = password;
     }
@@ -31,6 +30,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "Username: " + username + ", password: " + password;
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

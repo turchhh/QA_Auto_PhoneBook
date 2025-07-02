@@ -45,7 +45,7 @@ public class LoginPage extends BasePage{
     }
 
     public void typeLoginForm(User user){
-        logger.info("type login form data " + user.toString());
+        logger.info("type login form with data "+ user.toString());
         inputEmail.sendKeys(user.getUsername());
         inputPassword.sendKeys(user.getPassword());
         logger.info("click btn Login " + btnLoginForm.getTagName());

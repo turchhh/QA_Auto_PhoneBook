@@ -66,12 +66,13 @@ public abstract class BasePage {
     }
 
     public boolean validateURL(String str){
-       return new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.urlContains(str));
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlContains(str));
     }
-
     public boolean isUrlNotContains(String str){
         pause(5);
-        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.not(ExpectedConditions.urlContains(str)));
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.not(ExpectedConditions.urlContains(str)));
     }
 
 

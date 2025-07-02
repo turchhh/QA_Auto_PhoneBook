@@ -13,17 +13,14 @@ import pages.LoginPage;
 import utils.TestNGListener;
 
 import java.lang.reflect.Method;
-
 @Listeners(TestNGListener.class)
-
-
 public class LoginTests extends ApplicationManager {
 
     @Test
-    public void loginPositiveTest(Method method){
-        logger.info("start method {}", method.getName());
+    public void loginPositiveTest(Method method) {
+        logger.info("start method " + method.getName());
         User user = new User("qa_mail@mail.com", "Qwerty123!");
-        logger.info("test data {}", user.toString());
+        logger.info("test data --> " + user.toString());
         HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
@@ -34,7 +31,7 @@ public class LoginTests extends ApplicationManager {
     }
 
     @Test
-    public void loginNegativeTest_wrongPassword(){
+    public void loginNegativeTest_wrongPassword() {
         User user = new User("qa_mail@mail.com", "Qwerty123!ZZZ");
         HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLoginHeader();
@@ -45,7 +42,7 @@ public class LoginTests extends ApplicationManager {
     }
 
     @Test
-    public void loginNegativeTest_wrongEmail(){
+    public void loginNegativeTest_wrongEmail() {
         User user = new User("qa_mailmail.com", "Qwerty123!");
         HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLoginHeader();
