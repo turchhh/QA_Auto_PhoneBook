@@ -1,5 +1,6 @@
 package api_tests;
 
+import dto.ErrorMessageDtoString;
 import dto.User;
 import io.restassured.response.Response;
 import manager.AuthenticationController;
@@ -36,6 +37,33 @@ public class RegistrationTestsRest extends AuthenticationController implements B
         System.out.println(response.getStatusCode());
         System.out.println(response.getStatusLine());
         Assert.assertEquals(response.getStatusCode(), 400);
+    }
+
+    @Test
+    public void loginPositiveTest_200(){
+        User user = new User("valeriya.qa@gmail.com", "678512Lera!");
+        Response response = requestRegLogin(user, LOGIN_URL);
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getStatusLine());
+        Assert.assertEquals(response.getStatusCode(), 200);
+    }
+
+    @Test
+    public void loginNegativeTest_401(){
+        User user = new User("valeriya_qa@gmail.com", "678512Lera!");
+        Response response = requestRegLogin(user, LOGIN_URL);
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getStatusLine());
+        Assert.assertEquals(response.getStatusCode(), 401);
+    }
+
+    @Test
+    public void loginNegativeTest_ErrorMessage_401(){
+        User user = new User("valeriya_qa@gmail.com", "678512Lera!");
+        Response response = requestRegLogin(user, LOGIN_URL);
+        ErrorMessageDtoString errorMessageDtoString = response.getBody().as(ErrorMessageDtoString.class);
+        Assert.assertEquals(errorMessageDtoString.getError(), "Unauthorized", "validate error");
+        System.out.println(response.getBody().asString());
     }
 
 }
