@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class ErrorMessageDtoString {
+public class ErrorMessageDto {
     private String  timestamp;
     private int status;
     private String error;

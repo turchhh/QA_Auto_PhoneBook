@@ -1,6 +1,6 @@
 package api_tests;
 
-import dto.ErrorMessageDtoString;
+import dto.ErrorMessageDto;
 import dto.User;
 import io.restassured.response.Response;
 import manager.AuthenticationController;
@@ -61,8 +61,8 @@ public class RegistrationTestsRest extends AuthenticationController implements B
     public void loginNegativeTest_ErrorMessage_401(){
         User user = new User("valeriya_qa@gmail.com", "678512Lera!");
         Response response = requestRegLogin(user, LOGIN_URL);
-        ErrorMessageDtoString errorMessageDtoString = response.getBody().as(ErrorMessageDtoString.class);
-        Assert.assertEquals(errorMessageDtoString.getError(), "Unauthorized", "validate error");
+        ErrorMessageDto errorMessageDto = response.getBody().as(ErrorMessageDto.class);
+        Assert.assertEquals(errorMessageDto.getError(), "Unauthorized", "validate error");
         System.out.println(response.getBody().asString());
     }
 
