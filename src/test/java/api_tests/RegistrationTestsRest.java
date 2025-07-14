@@ -57,7 +57,7 @@ public class RegistrationTestsRest extends AuthenticationController implements B
         Assert.assertEquals(response.getStatusCode(), 401);
     }
 
-    @Test
+    @Test(groups = "smoke")
     public void loginNegativeTest_ErrorMessage_401(){
         User user = new User("valeriya_qa@gmail.com", "678512Lera!");
         Response response = requestRegLogin(user, LOGIN_URL);

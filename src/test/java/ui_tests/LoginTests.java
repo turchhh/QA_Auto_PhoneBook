@@ -16,10 +16,10 @@ import java.lang.reflect.Method;
 @Listeners(TestNGListener.class)
 public class LoginTests extends ApplicationManager {
 
-    @Test
+    @Test(groups = "smoke")
     public void loginPositiveTest(Method method) {
         logger.info("start method " + method.getName());
-        User user = new User("qa_mail@mail.com", "Qwerty123!");
+        User user = new User("valeriya.qa@mail.com", "678512Lera!");
         logger.info("test data --> " + user.toString());
         HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLoginHeader();
@@ -30,9 +30,9 @@ public class LoginTests extends ApplicationManager {
         //System.out.println("after assert");
     }
 
-    @Test
+    @Test()
     public void loginNegativeTest_wrongPassword() {
-        User user = new User("qa_mail@mail.com", "Qwerty123!ZZZ");
+        User user = new User("valeriya.qa@mail.com", "678512Lera!ZZZ");
         HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
@@ -41,9 +41,9 @@ public class LoginTests extends ApplicationManager {
         Assert.assertTrue(loginPage.isErrorMessagePresent("Login Failed with code 401"));
     }
 
-    @Test
+    @Test()
     public void loginNegativeTest_wrongEmail() {
-        User user = new User("qa_mailmail.com", "Qwerty123!");
+        User user = new User("valeriya.qa@mail.comm", "678512Lera!");
         HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());

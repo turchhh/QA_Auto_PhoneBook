@@ -6,28 +6,39 @@ import dto.User;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeSuite;
+import utils.BaseApi;
 
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static utils.PropertiesReader.getProperty;
-import static utils.BaseApi.*;
 
-public class ContactController {
+public class ContactController implements BaseApi {
+    /*   given()
+            .header("Authorisation", "value")
+            .body(user)
+         .when()
+            .post(url)
+         .then()    thenReturn()  --> response
+
+       Request
+       Response
+     */
 
     protected TokenDto tokenDto;
 
     @BeforeSuite
     public void login(){
-        User user = new User(getProperty("login.properties", "email"), getProperty("login.properties", "password"));
+        User user = new User(getProperty("login.properties", "email"),
+                getProperty("login.properties", "password"));
         Response response = new AuthenticationController().requestRegLogin(user, LOGIN_URL);
-        if (response.getStatusCode() == 200){
+        //System.out.println(response.getStatusLine());
+        if (response.getStatusCode() == 200) {
             tokenDto = response.body().as(TokenDto.class);
-        }else{
-            System.out.println("Smth sent wrong -->" + response.getStatusCode());
+        }else {
+            System.out.println("Smth sent wront --> "+response.getStatusCode());
         }
     }
 
-    protected Response addNewContactRequest(Contact contact,TokenDto tokenDto){
+    protected Response addNewContactRequest(Contact contact, TokenDto tokenDto){
         return given()
                 .body(contact)
                 .baseUri(getProperty("login.properties", "baseUri"))
@@ -35,7 +46,20 @@ public class ContactController {
                 .accept(ContentType.JSON)
                 .header("Authorization", tokenDto.getToken())
                 .post(ADD_NEW_CONTACT_URL)
-                .thenReturn();
+                .thenReturn()
+                ;
+    }
+    protected Response updateContactRequest(Contact contact, TokenDto tokenDto){
+        return given()
+                .log().all()   //body, headers, cookies, status
+                .body(contact)
+                .baseUri(getProperty("login.properties", "baseUri"))
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", tokenDto.getToken())
+                .put(ADD_NEW_CONTACT_URL)
+                .thenReturn()
+                ;
     }
 
     public Response getAllUserContacts(){
@@ -44,9 +68,18 @@ public class ContactController {
                 .accept(ContentType.JSON)
                 .header("Authorization", tokenDto.getToken())
                 .get(ADD_NEW_CONTACT_URL)
-                .thenReturn();
-
+                .thenReturn()
+                ;
     }
 
-
+    protected Response deleteContactById(Contact contact, TokenDto tokenDto){
+        return given()
+                .log().all()
+                .baseUri(getProperty("login.properties", "baseUri"))
+                .accept(ContentType.JSON)
+                .header("Authorization", tokenDto.getToken())
+                .delete(ADD_NEW_CONTACT_URL+"/"+contact.getId())
+                .thenReturn()
+                ;
+    }
 }
